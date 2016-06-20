@@ -22,6 +22,23 @@ Deriv2 <- function(x,y){
        intensity = (y[Range+1] - 2*y[Range] + y[Range-1]) / h^2)
 }
 
+msc <- function(spectrum, ...){
+  UseMethod("msc", spectrum)    
+}
+
+msc.numeric <- function(spectrum, reference){
+  Rm <- mean(reference)
+  Sc <- spectrum - mean(spectrum);
+  Rc <- reference - Rm;
+  
+  m = ginv(crossprod(Rc)) %*% crossprod(Rc, Sc);
+  Sc / m + Rm
+}
+
+msc.matrix <- function(spectra, reference = apply(spectra, 2, median)){
+  t(apply(spectra, 1, function(x) msc.numeric(x, reference = reference)));
+}
+
 integral.normalization<- function(spectra, value = 100){
   t(apply(spectra, 1, function(x) (x * value) / sum(abs(x))))
 }
