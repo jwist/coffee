@@ -5,7 +5,20 @@ library(pROC)
 library(rLims)
 
 #Put path were output should be written here
-prefix <- ""
+prefix <- "/home/jessica/metabo"
+
+ginv<-function(X, tol = sqrt(.Machine$double.eps))
+{
+  ## Generalized Inverse of a Matrix
+  dnx <- dimnames(X)
+  if(is.null(dnx)) dnx <- vector("list", 2)
+  s <- svd(X)
+  nz <- s$d > tol * s$d[1]
+  structure(
+    if(any(nz)) s$v[, nz] %*% (t(s$u[, nz])/s$d[nz]) else X,
+    dimnames = dnx[2:1])
+}
+
 
 Deriv1 <- function(x,y){
   y.prime <- diff(y) / diff(x)
@@ -94,7 +107,7 @@ nfigs <- 0
 
 ##read metadata
 
-metadata <- read.table("data/metadata.csv",
+metadata <- read.table("./data/metadata.csv",
                        header=TRUE,sep="\t")[1:317,]
 
 #Change labels to -1 = Arabica, 1 = Robusta
@@ -112,7 +125,7 @@ levels(metadata$groups)[!levels(metadata$groups) %in% c("Colombia", "Peru", "Bra
 ## IR
 
 #read data
-irdata <- as.matrix(read.table("data/mIRspectra.csv",
+irdata <- as.matrix(read.table("./data/mIRspectra.csv",
                                header=FALSE,sep=" ")[1:317,])
 #nu scale for spectra
 dx <- 0.964233
@@ -144,9 +157,9 @@ irdata.deriv2.wavelength.optimized1 <- normalizing[[1]](irdata.deriv2.wavelength
 ###   NIR    ###
 
 #read data
-id<-as.vector(as.matrix(read.csv("data/NIRSamples.csv")))
-dataNIR<-as.matrix(read.csv("data/NIRSpectra.csv", sep=""))
-nirscale<-as.vector(as.matrix(read.csv("data/NIRscale.csv", sep="", header=FALSE)))
+id<-as.vector(as.matrix(read.csv("./data/NIRSamples.csv")))
+dataNIR<-as.matrix(read.csv("./data/NIRspectra.csv", sep=""))
+nirscale<-as.vector(as.matrix(read.csv("./data/NIRscale.csv", sep="", header=FALSE)))
 #metadata <- read.table("~/CoffeeIR/FT-IR_ JCAMP-DX and .SPA files/sampleMetadata.csv",
 # header=TRUE,sep="\t")[1:317,]
 
@@ -177,7 +190,7 @@ nirdev2scale<-as.numeric(nirscale[2:901])
 
 ##Read NMR
 
-load("data/dataNMR.rda")
+load("./data/dataNMR.rda")
 nmr.spectra <- res$nmrData #vaya nombre...
 nmr.id <- res$param$catalogID
 
