@@ -12,7 +12,8 @@ while (prefix == ""){
 if (substr(prefix,nchar(prefix),nchar(prefix)) != "/"){
     prefix <- paste(prefix, "/", sep="")
 }
-prefix <- paste(prefix,"Coffee_Origin_IRvNMR_Images/", sep="")
+prefix <- paste(prefix,"Coffee_Origin_IRvNMR_Images897/", sep="")
+dir.create(prefix)
 
 
 ginv<-function(X, tol = sqrt(.Machine$double.eps))
