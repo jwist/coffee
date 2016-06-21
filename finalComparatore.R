@@ -5,7 +5,15 @@ library(pROC)
 library(rLims)
 
 #Put path were output should be written here
-prefix <- "/home/jessica/metabo"
+prefix <- ""
+while (prefix == ""){
+  prefix <- readline("Where should the plots be stored? (e.g. /home/moi/put_images_here/)")
+}
+if (substr(prefix,nchar(prefix),nchar(prefix)) != "/"){
+    prefix <- paste(prefix, "/", sep="")
+}
+prefix <- paste(prefix,"Coffee_Origin_IRvNMR_Images/", sep="")
+
 
 ginv<-function(X, tol = sqrt(.Machine$double.eps))
 {
@@ -386,7 +394,7 @@ for (i in 1:3){
   #Choose best number of components from the previous plot
   best.nComp <- 0
   while (best.nComp < 1){
-    best.nComp <- readline("Choose number of components to proceed -Make sure you don't mess up!")
+    best.nComp <- readline("Choose number of components to proceed")
   }
   best.nComp <- as.numeric(best.nComp)
   
@@ -741,7 +749,7 @@ ir.validation <-lims.validate(model = model[[i]], predictors = predictors,
   #Choose best number of components from the previous plot
   best.nComp <- 0
   while (best.nComp < 1){
-    best.nComp <- readline("Choose number of components to proceed -Make sure you don't mess up!")
+    best.nComp <- readline("Choose number of components to proceed")
   }
   best.nComp <- as.numeric(best.nComp)
   
